@@ -2,13 +2,16 @@
 
 
 from email.mime import base
-
+import random
+########
+from datetime import datetime
 
 class AbstractMelonOrder:
     """An abstract base class that other Melon Orders inherit from."""
 
     order_type = None
     tax = 0
+    
 
     def __init__(self, species, qty):
         """Initialize melon order attributes."""
@@ -20,7 +23,7 @@ class AbstractMelonOrder:
     def get_total(self):
         """Calculate price, including tax."""
 
-        base_price = 5
+        base_price = AbstractMelonOrder.get_base_price()
 
         if self.species == "Christmas":
             base_price = base_price * 1.5 
@@ -39,7 +42,21 @@ class AbstractMelonOrder:
 
         self.shipped = True
 
+    def get_base_price():
+        """Get's random integer between 5 and 9 and returns it"""
+        
+        price = random.randint(5,9)
+        
+        now = datetime.now()
+        today = now.date()
+        weekday = today.weekday()
+        current_time = now.time()
+        hour = current_time.hour()
+        
 
+        if weekday in range(0,5) and hour in range(8,12):
+            price += 4
+            
 
 class DomesticMelonOrder(AbstractMelonOrder):
     """A melon order within the USA."""
